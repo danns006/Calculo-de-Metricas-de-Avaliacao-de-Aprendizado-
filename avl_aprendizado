@@ -1,0 +1,25 @@
+import tensorflow as tf
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix
+
+y_pred = model.predict(test_images)
+y_pred_classes = np.argmax(y_pred, axis=1)
+
+con_mat = confusion_matrix(test_labels, y_pred_classes)
+
+con_mat_norm = np.around(con_mat.astype('float') / con_mat.sum(axis=1)[:, np.newaxis], decimals=2)
+
+classes = [str(i) for i in range(10)]
+
+con_mat_df = pd.DataFrame(con_mat_norm, index=classes, columns=classes)
+
+plt.figure(figsize=(8, 8))
+sns.heatmap(con_mat_df, annot=True, cmap=plt.cm.Blues, linewidths=0.5, linecolor='gray')
+plt.title('Matriz de Confusão Normalizada')
+plt.ylabel('Rótulo Verdadeiro')
+plt.xlabel('Rótulo Predito')
+plt.tight_layout()
+plt.show()
